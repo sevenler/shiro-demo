@@ -12,23 +12,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <classpathScope>test</classpathScope>
-                    <mainClass>com.ujipin.shiro.Quickstart</mainClass>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.2.11.v20150529</version>
@@ -81,15 +64,6 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
             <version>${shiro.version}</version>
-        </dependency>
-
-        <!-- Shiro uses SLF4J for logging.  We'll use the 'simple' binding
-             in this example app.  See http://www.slf4j.org for more info. -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.6.1</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
