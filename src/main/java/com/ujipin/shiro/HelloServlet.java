@@ -1,5 +1,6 @@
 package com.ujipin.shiro;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.config.IniSecurityManagerFactory;
@@ -21,18 +22,17 @@ import java.io.PrintWriter;
  * Created by Johnny on 15/11/15.
  */
 public class HelloServlet extends HttpServlet {
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("===================");
+    private static Logger logger = Logger.getLogger(HelloServlet.class);
 
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Set response content type
         response.setContentType("text/html");
-
         // Actual logic goes here.
         PrintWriter out = response.getWriter();
         out.println("<h1> hello ... servlet </h1>");
-
         shiro_signin();
-        System.out.println("++++++++++");
+
+        logger.info("this is log4j info");
     }
 
     public void shiro_signin(){
@@ -65,7 +65,7 @@ public class HelloServlet extends HttpServlet {
         session.setAttribute("someKey", "aValue");
         String value = (String) session.getAttribute("someKey");
         if (value.equals("aValue")) {
-            System.out.println("Retrieved the correct value! [" + value + "]");
+            logger.info("Retrieved the correct value! [" + value + "]");
         }
 
         // let's login the current user so we can check against roles and permissions:
@@ -75,11 +75,11 @@ public class HelloServlet extends HttpServlet {
             try {
                 currentUser.login(token);
             } catch (UnknownAccountException uae) {
-                System.out.println("There is no user with username of " + token.getPrincipal());
+                logger.info("There is no user with username of " + token.getPrincipal());
             } catch (IncorrectCredentialsException ice) {
-                System.out.println("Password for account " + token.getPrincipal() + " was incorrect!");
+                logger.info("Password for account " + token.getPrincipal() + " was incorrect!");
             } catch (LockedAccountException lae) {
-                System.out.println("The account for username " + token.getPrincipal() + " is locked.  " +
+                logger.info("The account for username " + token.getPrincipal() + " is locked.  " +
                         "Please contact your administrator to unlock it.");
             }
             // ... catch more exceptions here (maybe custom ones specific to your application?
@@ -90,20 +90,20 @@ public class HelloServlet extends HttpServlet {
 
         //say who they are:
         //print their identifying principal (in this case, a username):
-        System.out.println("User [" + currentUser.getPrincipal() + "] logged in successfully.");
+        logger.info("User [" + currentUser.getPrincipal() + "] logged in successfully.");
 
         //test a role:
         if (currentUser.hasRole("admin")) {
-            System.out.println("has admin role");
+            logger.info("has admin role");
         } else {
-            System.out.println("no admin role");
+            logger.info("no admin role");
         }
 
         //test a typed permission (not instance-level)
         if (currentUser.isPermitted("order:read:finished")) {
-            System.out.println("has order read ");
+            logger.info("has order read ");
         } else {
-            System.out.println("no  order read ");
+            logger.info("no  order read ");
         }
     }
 }
