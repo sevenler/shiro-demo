@@ -1,44 +1,41 @@
-package com.ujipin.shiro;/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+package com.ujipin.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.config.IniSecurityManagerFactory;
+
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
-import org.apache.shiro.mgt.SecurityManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
- * Simple Quickstart application showing how to use Shiro's API.
- *
- * @since 0.9 RC2
+ * Created by Johnny on 15/11/15.
  */
-public class Quickstart {
+public class HelloServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("===================");
 
-    private static final transient Logger log = LoggerFactory.getLogger(Quickstart.class);
+        // Set response content type
+        response.setContentType("text/html");
 
+        // Actual logic goes here.
+        PrintWriter out = response.getWriter();
+        out.println("<h1> hello ... servlet </h1>");
 
-    public static void main(String[] args) {
+        shiro_signin();
+        System.out.println("++++++++++");
+    }
+
+    public void shiro_signin(){
 
         // The easiest way to create a Shiro SecurityManager with configured
         // realms, users, roles and permissions is to use the simple INI config.
@@ -68,21 +65,21 @@ public class Quickstart {
         session.setAttribute("someKey", "aValue");
         String value = (String) session.getAttribute("someKey");
         if (value.equals("aValue")) {
-            log.info("Retrieved the correct value! [" + value + "]");
+            System.out.println("Retrieved the correct value! [" + value + "]");
         }
 
         // let's login the current user so we can check against roles and permissions:
         if (!currentUser.isAuthenticated()) {
-            UsernamePasswordToken token = new UsernamePasswordToken("customer", "123456");
+            UsernamePasswordToken token = new UsernamePasswordToken("root", "root");
             token.setRememberMe(true);
             try {
                 currentUser.login(token);
             } catch (UnknownAccountException uae) {
-                log.info("There is no user with username of " + token.getPrincipal());
+                System.out.println("There is no user with username of " + token.getPrincipal());
             } catch (IncorrectCredentialsException ice) {
-                log.info("Password for account " + token.getPrincipal() + " was incorrect!");
+                System.out.println("Password for account " + token.getPrincipal() + " was incorrect!");
             } catch (LockedAccountException lae) {
-                log.info("The account for username " + token.getPrincipal() + " is locked.  " +
+                System.out.println("The account for username " + token.getPrincipal() + " is locked.  " +
                         "Please contact your administrator to unlock it.");
             }
             // ... catch more exceptions here (maybe custom ones specific to your application?
@@ -93,25 +90,20 @@ public class Quickstart {
 
         //say who they are:
         //print their identifying principal (in this case, a username):
-        log.info("User [" + currentUser.getPrincipal() + "] logged in successfully.");
+        System.out.println("User [" + currentUser.getPrincipal() + "] logged in successfully.");
 
         //test a role:
         if (currentUser.hasRole("admin")) {
-            log.info("has admin role");
+            System.out.println("has admin role");
         } else {
-            log.info("no admin role");
+            System.out.println("no admin role");
         }
 
         //test a typed permission (not instance-level)
         if (currentUser.isPermitted("order:read:finished")) {
-            log.info("has order read ");
+            System.out.println("has order read ");
         } else {
-            log.info("no  order read ");
+            System.out.println("no  order read ");
         }
-
-
-        currentUser.logout();
-
-        System.exit(0);
     }
 }
