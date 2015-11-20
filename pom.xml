@@ -11,12 +11,19 @@
 
     <build>
         <plugins>
+
+            <!--
+              jetty插件 在项目的根目录中执行命令 mvn jetty:run 运行项目
+              其中的scanIntervalSeconds 表示多少秒扫描项目的变化，并重新编译启动项目
+              httpConnector中的port配置启动的端口
+
+            -->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.2.11.v20150529</version>
                 <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <scanIntervalSeconds>3</scanIntervalSeconds>
                     <webApp>
                         <contextPath>/</contextPath>
                     </webApp>

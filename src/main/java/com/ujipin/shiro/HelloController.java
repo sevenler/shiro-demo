@@ -24,7 +24,7 @@ public class HelloController {
 
     @RequestMapping("hello.do")
     protected void test(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        logger.info("this is log4j info");
+        logger.info("this ==  is log4j info");
 
         shiro_signin();
 

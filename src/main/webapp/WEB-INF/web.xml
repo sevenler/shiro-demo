@@ -13,16 +13,23 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
+    <!--
+    apache shiro 过滤器
+    同时配置shiro的ini配置文件
+
+    filter-mapping 配置所有的请求都要经过shiro来过滤
+    其中主要就是对url进行权限判断
+    url的权限配置可以看shiro的ini配置或者权限数据库
+    -->
     <filter>
         <filter-name>ShiroFilter</filter-name>
         <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
 
         <init-param>
             <param-name>configPath</param-name>
-            <param-value>src/main/resources/shiro.ini</param-value>
+            <param-value>classpath*:/shiro.ini</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>ShiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -33,10 +40,6 @@
     </filter-mapping>
 
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
-
     <!--<servlet>-->
         <!--<servlet-name>Hello</servlet-name>-->
         <!--<servlet-class>com.ujipin.shiro.HelloServlet</servlet-class>-->
@@ -46,6 +49,11 @@
         <!--<url-pattern>/hello/*</url-pattern>-->
     <!--</servlet-mapping>-->
 
+    <!--
+    spring mvc servlet
+    init-param中的contextConfigLocation 配置spring-mvc.xml配置文件目录
+    servlet-mapping 配置所有的请求都使用spring mvc servlet来处理
+    -->
     <servlet>
         <servlet-name>springmvcServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
